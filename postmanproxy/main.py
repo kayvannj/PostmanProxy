@@ -2,6 +2,7 @@ from postman.collection import Collection
 from postman.collection_creator_proxy import CollectionCreatorProxy
 from postman.header_filter_proxy import HeaderFilterProxy
 from libmproxy import controller, proxy
+from libmproxy.proxy.server import ProxyServer
 import argparse
 import signal
 import sys
@@ -41,10 +42,8 @@ def start_creator_proxy(options):
 	}
 
 	collection = Collection(name, path)
-	config = proxy.ProxyConfig(
-		cacert = os.path.expanduser("~/.mitmproxy/mitmproxy-ca.pem")
-	)
-	server = proxy.ProxyServer(config, port)
+	config = proxy.ProxyConfig(port=port)
+	server = ProxyServer(config)
 
 	if options.tcp_connection == 'false':
 		tcp_connection = False
@@ -62,10 +61,8 @@ def start_creator_proxy(options):
 def start_filter_proxy(options):
 	print "Press Ctrl+C to stop the proxy"
 	port = int(options.port)
-	config = proxy.ProxyConfig(
-		cacert = os.path.expanduser("~/.mitmproxy/mitmproxy-ca.pem")
-	)
-	server = proxy.ProxyServer(config, port)
+	config = proxy.ProxyConfig(port=port)
+	server = ProxyServer(config)
 	m = HeaderFilterProxy(server)
 	m.run()
 
