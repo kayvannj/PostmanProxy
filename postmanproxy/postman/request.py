@@ -87,7 +87,9 @@ class Request:
 		return d
 
 	def get_name(self, proxy_request):
-		return proxy_request.path
+		path = proxy_request.path
+		name = path[:30]
+		return name
 
 	def get_url(self, proxy_request):
 		if proxy_request.port == 443:

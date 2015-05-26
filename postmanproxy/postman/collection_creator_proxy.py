@@ -59,7 +59,7 @@ class CollectionCreatorProxy(controller.Master):
 		try:
 			TCP_IP = self.tcp_host
 			TCP_PORT = self.tcp_port
-			BUFFER_SIZE = 1024 * 100
+			BUFFER_SIZE = 1048573 
 			MESSAGE = json.dumps(request.get_json())
 
 			print MESSAGE
@@ -105,8 +105,9 @@ class CollectionCreatorProxy(controller.Master):
 		except KeyboardInterrupt:
 			self.shutdown()
 
-	def handle_request(self, msg):
+	def handle_request(self, flow):
 		try:
+			msg = flow.request
 			request = Request(self.collection.id)
 			request.init_from_proxy(msg)
 
@@ -140,8 +141,9 @@ class CollectionCreatorProxy(controller.Master):
 		except Exception as ex:
 			logging.exception("Something awful happened!")
 
-		msg.reply()
+		flow.reply(flow.response)
 
-	def handle_response(self, msg):
+	def handle_response(self, flow):
 		print "Sent response"
-		msg.reply()
+		flow.reply(flow.response)
+
