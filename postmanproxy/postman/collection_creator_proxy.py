@@ -59,7 +59,7 @@ class CollectionCreatorProxy(controller.Master):
 		try:
 			TCP_IP = self.tcp_host
 			TCP_PORT = self.tcp_port
-			BUFFER_SIZE = 1048573 
+			BUFFER_SIZE = 1048573
 			MESSAGE = json.dumps(request.get_json())
 
 			print MESSAGE
@@ -108,10 +108,10 @@ class CollectionCreatorProxy(controller.Master):
 	def handle_request(self, flow):
 		try:
 			msg = flow.request
-			request = Request(self.collection.id)
-			request.init_from_proxy(msg)
+			request2 = Request(self.collection.id)
+			request2.init_from_proxy(msg)
 
-			print request.headers
+			print request2.headers
 			allowed_host = True
 			allowed_method = True
 			allowed_status_code = True
@@ -131,12 +131,12 @@ class CollectionCreatorProxy(controller.Master):
 			if allowed_method and allowed_host and allowed_status_code:
 				print self.rules
 				if not self.rules['restricted_headers']:
-					self.remove_restricted_headers(request)
+					self.remove_restricted_headers(request2)
 
-				self.collection.add_request(request)
+				self.collection.add_request(request2)
 
 				if self.tcp_connection:
-					self.send_to_postman(request)
+					self.send_to_postman(request2)
 					print "Sent to Postman"
 		except Exception as ex:
 			logging.exception("Something awful happened!")
